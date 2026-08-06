@@ -51,21 +51,21 @@ export default function ResidenceSetupPage() {
   };
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="mx-auto max-w-2xl px-6">
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold">
+    <div className="min-h-screen py-8 sm:py-12">
+      <div className="mx-auto max-w-2xl px-4 sm:px-6">
+        <div className="mb-8 sm:mb-10 text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold">
             Complete your residence
           </h1>
-          <p className="mt-2">
+          <p className="mt-2 text-sm sm:text-base">
             A couple more steps before it&apos;s ready to publish.
           </p>
         </div>
 
         <div className="space-y-5">
           {/* STEP 1 — CONFIRMATION */}
-          <div className="flex items-center gap-4 rounded-3xl p-6 shadow-sm border">
-            <CheckCircle2 size={28} className="shrink-0" />
+          <div className="flex items-center gap-3 sm:gap-4 rounded-3xl p-4 sm:p-6 shadow-sm border">
+            <CheckCircle2 size={24} className="shrink-0" />
             <div>
               <h2 className="font-semibold">Residence created</h2>
               <p className="text-sm">
@@ -75,7 +75,7 @@ export default function ResidenceSetupPage() {
           </div>
 
           {/* STEP 2 — AMENITY PICKER */}
-          <div className="rounded-3xl p-6 shadow-sm border">
+          <div className="rounded-3xl p-4 sm:p-6 shadow-sm border">
             <div className="mb-5">
               <h2 className="font-semibold">
                 What does this residence offer?
@@ -85,7 +85,7 @@ export default function ResidenceSetupPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               {AMENITIES.map((amenity) => {
                 const Icon = amenity.icon;
                 const isSelected = selectedNames.has(amenity.name);
@@ -99,7 +99,7 @@ export default function ResidenceSetupPage() {
                     type="button"
                     onClick={() => toggleAmenity(amenity)}
                     disabled={isLoading || isPending}
-                    className={`relative flex flex-col items-center gap-2 rounded-2xl border p-4 text-center transition disabled:opacity-50 ${
+                    className={`relative flex flex-col items-center gap-2 rounded-2xl border p-3 sm:p-4 text-center transition disabled:opacity-50 ${
                       isSelected
                         ? "border-orange-500"
                         : "border hover:border-slate-300"
@@ -111,7 +111,7 @@ export default function ResidenceSetupPage() {
                       </span>
                     )}
                     <Icon
-                      size={22}
+                      size={20}
                       className={isSelected ? "text-orange-600" : ""}
                     />
                     <span
@@ -128,9 +128,9 @@ export default function ResidenceSetupPage() {
           </div>
 
           {/* STEP 3 — PHOTOS */}
-          <div className="rounded-3xl p-6 shadow-sm border">
+          <div className="rounded-3xl p-4 sm:p-6 shadow-sm border">
             <div className="mb-4 flex items-center gap-4">
-              <ImagePlus size={28} className="shrink-0 text-orange-500" />
+              <ImagePlus size={24} className="shrink-0 text-orange-500" />
               <div>
                 <h2 className="font-semibold">Add photos</h2>
                 <p className="text-sm">
@@ -141,7 +141,7 @@ export default function ResidenceSetupPage() {
 
             <Link
               to={`/syndic/residences/${id}/photos`}
-              className="flex items-center justify-center gap-2 rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="flex items-center justify-center gap-2 rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 active:scale-[0.98]"
             >
               Add Photos
               <ArrowRight size={16} />
@@ -151,7 +151,7 @@ export default function ResidenceSetupPage() {
 
         <button
           onClick={() => navigate(`/syndic/residences/${id}`)}
-          className="mt-8 flex w-full items-center justify-center rounded-xl bg-orange-500 py-3 font-semibold text-white transition hover:bg-orange-600"
+          className="mt-8 flex w-full items-center justify-center rounded-xl bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 active:scale-[0.98]"
         >
           Finish Setup
         </button>

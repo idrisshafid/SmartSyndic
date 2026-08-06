@@ -96,9 +96,6 @@ Promise<void> => {
       floor: floor ? parseInt(floor as string, 10) : undefined,
     };
 
-    // Valider le statut si fourni, sinon utiliser 'available' par défaut
-
-    // Validation basique des nombres pour la pagination
     const parsedPage = page ? parseInt(page as string, 10) : 1;
     const parsedLimit = limit ? parseInt(limit as string, 10) : 10;
 

@@ -291,7 +291,6 @@ export const addPhoto = async (
 
     const photo =await incidentService.addPhoto(
         req.params.id, req.file!);
-    console.log(req.file);
     return res.status(201).json({
       success: true,
       message: "Photo uploaded",

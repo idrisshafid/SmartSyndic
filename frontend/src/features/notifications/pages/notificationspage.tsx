@@ -155,7 +155,7 @@ export default function NotificationsPage() {
               <h1 className="text-2xl font-bold tracking-tight text-slate-900">
                 Notifications
               </h1>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm ">
                 {notificationsList.length} notification{notificationsList.length > 1 ? "s" : ""}
                 {unreadCount > 0 && ` · ${unreadCount} non lue${unreadCount > 1 ? "s" : ""}`}
               </p>
@@ -216,17 +216,19 @@ export default function NotificationsPage() {
                 <div
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`group flex cursor-pointer items-start gap-4 rounded-2xl border p-4 shadow-sm transition hover:shadow-md ${
+                  className={`group flex cursor-pointer items-start gap-4 rounded-2xl 
+                    border p-4 shadow-sm transition hover:shadow-md ${
                     isUnread
                       ? "border-orange-200 bg-orange-50/30"
                       : "border-slate-200"
                   }`}
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full
+                   bg-white">
                     <Icon
                       size={18}
                       className={
-                        isUnread ? "text-orange-500" : "text-slate-400"
+                        isUnread ? "text-orange-300" : "text-red-500"
                       }
                     />
                   </div>
@@ -243,15 +245,16 @@ export default function NotificationsPage() {
                         </span>
                       )}
                       <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${typeColor}`}
+                        className={`inline-flex items-center rounded-full px-2.5 
+                            py-0.5 text-xs font-semibold ${typeColor}`}
                       >
                         {notification.type || "Général"}
                       </span>
                     </div>
-                    <p className="mt-1 text-sm text-slate-600">
+                    <p className="mt-1 text-sm ">
                       {notification.message}
                     </p>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs ">
                       {formatDate(notification.created_at!)}
                     </p>
                   </div>
@@ -265,7 +268,8 @@ export default function NotificationsPage() {
                           handleMarkRead(notification.id!);
                         }}
                         disabled={markRead.isPending}
-                        className="rounded-full p-1.5 text-slate-400 transition hover:bg-orange-100 hover:text-orange-600 disabled:opacity-50"
+                        className="rounded-full p-1.5 text-slate-400 
+                        transition hover:bg-orange-100 hover:text-orange-600 disabled:opacity-50"
                         title="Marquer comme lu"
                       >
                         {markRead.isPending && markRead.variables === notification.id ? (
@@ -283,13 +287,13 @@ export default function NotificationsPage() {
                         handleDelete(notification.id!);
                       }}
                       disabled={deleteNotification.isPending}
-                      className="rounded-full p-1.5 text-slate-400
-                       transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                      className="rounded-full p-1.5 text-slate-400 
+                      transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                       title="Supprimer"
                     >
                       {deleteNotification.isPending &&
                       deleteNotification.variables === notification.id ? (
-                        <Loader2 size={18} className="animate-spin" />
+                        <Loader2 size={14} className="animate-spin" />
                       ) : (
                         <Trash2 size={18} className="text-red-500" />
                       )}

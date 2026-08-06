@@ -13,9 +13,9 @@ const router = Router();
 // Register
 router.post("/register" , authLimiter , validate(registerSchema),register);
 // Login
-router.post("/login", validate(loginSchema), login);
+router.post("/login",authLimiter , validate(loginSchema), login);
 // Forgot Password
-router.post("/forgot-password", forgotPassword);
+router.post("/forgot-password",authLimiter, forgotPassword);
 // Reset Password
 router.post("/reset-password/", resetPassword);
 //me

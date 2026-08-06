@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as residenceService from "../services/residence.services";
+import {updateResidenceSchema} from "../validators/residence.schema"
 
 //Upload photo for residences
 export const uploadPhoto=async(req: Request<{ id: string }>, 
@@ -197,12 +198,10 @@ export const update = async (
   req: Request<{ id: string }>,
   res: Response) => {
   try {
+    const data = updateResidenceSchema.parse(req.body);
     const syndicId = req.user!.id;
-    const result = await residenceService.update(
-      req.params.id,
-      syndicId,
-      req.body
-    );
+    const result = await residenceService.update( req.params.id,    syndicId,  data);
+     console.log("BODY:", req.body);
 
     return res.status(200).json({
       success: true,

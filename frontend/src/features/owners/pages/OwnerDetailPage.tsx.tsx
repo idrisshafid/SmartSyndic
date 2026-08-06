@@ -47,12 +47,12 @@ function StatCard({ label, value, icon, color }: StatCardProps) {
     red: "bg-red-50 text-red-600",
   };
   return (
-    <div className="rounded-2xl p-6 shadow-sm border transition hover:shadow-md">
-      <div className="flex items-center justify-between">
-        <div className={`rounded-full p-2.5 ${colorMap[color]}`}>{icon}</div>
-        <span className="text-2xl font-bold">{value}</span>
+    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border transition hover:shadow-md">
+      <div className="flex items-center justify-between gap-2">
+        <div className={`rounded-full p-2 sm:p-2.5 ${colorMap[color]}`}>{icon}</div>
+        <span className="text-xl sm:text-2xl font-bold">{value}</span>
       </div>
-      <p className="mt-1 text-sm">{label}</p>
+      <p className="mt-1 text-xs sm:text-sm">{label}</p>
     </div>
   );
 }
@@ -72,16 +72,16 @@ function ApartmentCard({ apartment, onUnassign, isUnassigning }: ApartmentCardPr
   };
 
   return (
-    <div className="group rounded-2xl p-5 shadow-sm border transition hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">
+    <div className="group rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-sm border transition hover:shadow-md">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base sm:text-lg font-semibold break-words">
             Apartment {apartment.apartment_number}
           </h3>
           {apartment.residence_name && (
-            <p className="text-sm">{apartment.residence_name}</p>
+            <p className="text-sm break-words">{apartment.residence_name}</p>
           )}
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+          <div className="mt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-sm">
             {apartment.floor !== undefined && <span>Floor {apartment.floor}</span>}
             {apartment.capacity && <span>• {apartment.capacity} guests</span>}
             <span
@@ -96,7 +96,7 @@ function ApartmentCard({ apartment, onUnassign, isUnassigning }: ApartmentCardPr
         <button
           onClick={() => onUnassign(apartment.id)}
           disabled={isUnassigning}
-          className="rounded-full p-2 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+          className="self-end sm:self-start rounded-full p-2.5 sm:p-2 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
         >
           {isUnassigning ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
         </button>
@@ -151,11 +151,11 @@ function AssignModal({ isOpen, onClose, ownerId, onAssign }: AssignModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-3xl p-6 shadow-2xl border">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold">Assign Apartment</h3>
-          <button onClick={onClose} className="rounded-full p-1 hover:bg-slate-100">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
+      <div className="w-full max-w-md rounded-t-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-lg sm:text-xl font-bold">Assign Apartment</h3>
+          <button onClick={onClose} className="rounded-full p-1.5 hover:bg-slate-100 shrink-0">
             <XCircle size={20} />
           </button>
         </div>
@@ -168,7 +168,7 @@ function AssignModal({ isOpen, onClose, ownerId, onAssign }: AssignModalProps) {
               placeholder="Search apartment..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-12 w-full rounded-xl border outline-none transition focus:border-orange-500"
+              className="h-11 sm:h-12 w-full rounded-xl border pl-10 pr-3 outline-none transition focus:border-orange-500 text-sm sm:text-base"
             />
           </div>
           <div className="mt-2 max-h-48 overflow-auto rounded-xl border">
@@ -178,7 +178,7 @@ function AssignModal({ isOpen, onClose, ownerId, onAssign }: AssignModalProps) {
               filtered.map((apt) => (
                 <label
                   key={apt.id}
-                  className={`flex cursor-pointer items-center gap-3 px-4 py-2.5 transition hover:bg-orange-50 ${
+                  className={`flex cursor-pointer items-center gap-3 px-3 sm:px-4 py-2.5 transition hover:bg-orange-50 ${
                     selected === apt.id ? "bg-orange-50" : ""
                   }`}
                 >
@@ -186,9 +186,9 @@ function AssignModal({ isOpen, onClose, ownerId, onAssign }: AssignModalProps) {
                     type="radio"
                     checked={selected === apt.id}
                     onChange={() => setSelected(apt.id)}
-                    className="h-4 w-4 accent-orange-500"
+                    className="h-4 w-4 accent-orange-500 shrink-0"
                   />
-                  <span className="text-sm">
+                  <span className="text-sm break-words">
                     {apt.apartment_number}
                     {apt.floor !== undefined && ` – Floor ${apt.floor}`}
                   </span>
@@ -198,7 +198,7 @@ function AssignModal({ isOpen, onClose, ownerId, onAssign }: AssignModalProps) {
           </div>
         </div>
 
-        <div className="mt-5 flex gap-3">
+        <div className="mt-5 flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={onClose}
             className="flex-1 rounded-xl border py-2.5 text-sm font-medium transition hover:bg-slate-50"
@@ -272,20 +272,20 @@ export default function OwnerDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+      <div className="min-h-screen px-3 py-4 sm:px-6 sm:py-8 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-8 h-8 w-32 animate-pulse rounded" />
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+          <div className="mb-6 sm:mb-8 h-8 w-32 animate-pulse rounded" />
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-4">
             <div className="lg:col-span-1">
-              <div className="h-64 animate-pulse rounded-3xl border" />
+              <div className="h-64 animate-pulse rounded-2xl sm:rounded-3xl border" />
             </div>
-            <div className="lg:col-span-3 space-y-6">
-              <div className="grid grid-cols-3 gap-4">
+            <div className="lg:col-span-3 space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-24 animate-pulse rounded-2xl border" />
+                  <div key={i} className="h-24 animate-pulse rounded-xl sm:rounded-2xl border" />
                 ))}
               </div>
-              <div className="h-64 animate-pulse rounded-2xl border" />
+              <div className="h-64 animate-pulse rounded-xl sm:rounded-2xl border" />
             </div>
           </div>
         </div>
@@ -295,11 +295,14 @@ export default function OwnerDetailPage() {
 
   if (isError || !owner) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
           <AlertCircle size={48} className="mx-auto" />
-          <h2 className="mt-4 text-2xl font-bold">Owner not found</h2>
-          <Link to="/syndic/owners" className="mt-4 inline-block rounded-xl bg-orange-500 px-6 py-3 text-white">
+          <h2 className="mt-4 text-xl sm:text-2xl font-bold">Owner not found</h2>
+          <Link
+            to="/syndic/owners"
+            className="mt-4 inline-block w-full sm:w-auto rounded-xl bg-orange-500 px-6 py-3 text-white text-center"
+          >
             Back to Owners
           </Link>
         </div>
@@ -311,20 +314,20 @@ export default function OwnerDetailPage() {
   const paidCharges = charges.filter((c) => c.status === "validated").length;
 
   return (
-    <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen px-3 py-4 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <Link
           to="/syndic/owners"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium transition"
+          className="mb-4 sm:mb-6 inline-flex items-center gap-2 text-sm font-medium transition"
         >
           <ArrowLeft size={18} />
           Back to Owners
         </Link>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-4">
           {/* Left card – Owner info */}
           <div className="lg:col-span-1">
-            <div className="rounded-3xl p-6 shadow-sm border">
+            <div className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border">
               <div className="flex flex-col items-center text-center">
                 <OwnerFigure
                   firstName={owner.first_name}
@@ -333,22 +336,22 @@ export default function OwnerDetailPage() {
                   status={owner.is_active ? "active" : "inactive"}
                   showStatus
                 />
-                
-                <div className="mt-2 space-y-1.5 text-sm">
-                  <div className="flex items-center justify-center gap-2">
-                    <Mail size={14} />
-                    <span>{owner.email}</span>
+
+                <div className="mt-2 space-y-1.5 text-sm w-full">
+                  <div className="flex items-center justify-center gap-2 min-w-0">
+                    <Mail size={14} className="shrink-0" />
+                    <span className="break-all">{owner.email}</span>
                   </div>
                   {owner.phone && (
                     <div className="flex items-center justify-center gap-2">
-                      <Phone size={14} />
-                      <span>{owner.phone}</span>
+                      <Phone size={14} className="shrink-0" />
+                      <span className="break-all">{owner.phone}</span>
                     </div>
                   )}
                   {owner.country && (
                     <div className="flex items-center justify-center gap-2">
-                      <MapPin size={14} />
-                      <span>{owner.country}</span>
+                      <MapPin size={14} className="shrink-0" />
+                      <span className="break-words">{owner.country}</span>
                     </div>
                   )}
                 </div>
@@ -356,9 +359,9 @@ export default function OwnerDetailPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-3 space-y-4 sm:space-y-6">
             {/* Stats */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
               <StatCard
                 label="Apartments"
                 value={apartments.length}
@@ -380,12 +383,12 @@ export default function OwnerDetailPage() {
             </div>
 
             {/* Apartments Section */}
-            <div className="rounded-3xl p-6 shadow-sm border">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold ">Assigned Apartments</h2>
+            <div className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <h2 className="text-lg sm:text-xl font-bold">Assigned Apartments</h2>
                 <button
                   onClick={() => setAssignModalOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-orange-600"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 sm:py-2 text-sm font-medium text-white shadow-sm transition hover:bg-orange-600"
                 >
                   <Plus size={16} />
                   Assign Apartment
@@ -393,13 +396,13 @@ export default function OwnerDetailPage() {
               </div>
 
               {apartmentsLoading ? (
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2">
                   {[1, 2].map((i) => (
                     <div key={i} className="h-24 animate-pulse rounded-xl border" />
                   ))}
                 </div>
               ) : apartments.length === 0 ? (
-                <div className="mt-6 flex flex-col items-center justify-center rounded-xl border-2 border-dashed py-8 text-center">
+                <div className="mt-4 sm:mt-6 flex flex-col items-center justify-center rounded-xl border-2 border-dashed py-6 sm:py-8 px-3 text-center">
                   <Home size={32} />
                   <p className="mt-2 text-sm">No apartments assigned yet</p>
                   <button
@@ -410,13 +413,13 @@ export default function OwnerDetailPage() {
                   </button>
                 </div>
               ) : (
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2">
                   {apartments.map((apt) => (
                     <ApartmentCard
                       key={apt.id}
                       apartment={apt}
                       onUnassign={handleUnassign}
-                      isUnassigning={unassign.status === 'pending'}
+                      isUnassigning={unassign.status === "pending"}
                     />
                   ))}
                 </div>
@@ -424,12 +427,12 @@ export default function OwnerDetailPage() {
             </div>
 
             {/* ─── CHARGES SECTION ─── */}
-            <div className="rounded-3xl p-6 shadow-sm border">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold">Charges</h2>
+            <div className="rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <h2 className="text-lg sm:text-xl font-bold">Charges</h2>
                 <button
                   onClick={handleCreateCharge}
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 sm:py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700"
                 >
                   <Plus size={16} />
                   Create Charge
@@ -443,7 +446,7 @@ export default function OwnerDetailPage() {
                   ))}
                 </div>
               ) : charges.length === 0 ? (
-                <div className="mt-6 flex flex-col items-center justify-center rounded-xl border-2 border-dashed py-8 text-center">
+                <div className="mt-4 sm:mt-6 flex flex-col items-center justify-center rounded-xl border-2 border-dashed py-6 sm:py-8 px-3 text-center">
                   <CreditCard size={32} />
                   <p className="mt-2 text-sm">No charges yet</p>
                   <button
@@ -454,60 +457,115 @@ export default function OwnerDetailPage() {
                   </button>
                 </div>
               ) : (
-                <div className="mt-4 overflow-x-auto">
-                  <table className="w-full min-w-[600px] border-collapse text-sm">
-                    <thead className="text-xs font-medium uppercase">
-                      <tr>
-                        <th className="px-4 py-3 text-left">Title</th>
-                        <th className="px-4 py-3 text-right">Amount</th>
-                        <th className="px-4 py-3 text-left">Due Date</th>
-                        <th className="px-4 py-3 text-center">Status</th>
-                        <th className="px-4 py-3 text-right">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      {charges.map((charge) => (
-                        <tr key={charge.id} className="transition hover:bg-slate-50/50">
-                          <td className="px-4 py-3 font-medium">
-                            {charge.title}
-                          </td>
-                          <td className="px-4 py-3 text-right font-medium">
-                            {new Intl.NumberFormat("fr-FR", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }).format(charge.amount)} MAD
-                          </td>
-                          <td className="px-4 py-3">
-                            {new Intl.DateTimeFormat("fr-FR", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                            }).format(new Date(charge.due_date))}
-                          </td>
-                          <td className="px-4 py-3 text-center">
+                <>
+                  {/* Mobile: cards */}
+                  <div className="mt-4 space-y-3 sm:hidden">
+                    {charges.map((charge) => (
+                      <div
+                        key={charge.id}
+                        className="rounded-xl border p-4 space-y-3 shadow-sm"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="font-medium break-words min-w-0">{charge.title}</p>
+                          <div className="shrink-0">
                             <ChargeBadge status={charge.status} />
-                          </td>
-                          <td className="px-4 py-3 text-right">
-                            {charge.status === "pending" && (
-                              <button
-                                onClick={() => handleValidateCharge(charge.id)}
-                                disabled={validateCharge.isPending}
-                                className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-200 disabled:opacity-50"
-                              >
-                                {validateCharge.isPending ? (
-                                  <Loader2 size={12} className="animate-spin" />
-                                ) : (
-                                  <CheckCircle size={14} />
-                                )}
-                                Validate
-                              </button>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <p className="text-xs opacity-70">Amount</p>
+                            <p className="font-medium">
+                              {new Intl.NumberFormat("fr-FR", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              }).format(charge.amount)}{" "}
+                              MAD
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs opacity-70">Due Date</p>
+                            <p className="font-medium">
+                              {new Intl.DateTimeFormat("fr-FR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }).format(new Date(charge.due_date))}
+                            </p>
+                          </div>
+                        </div>
+                        {charge.status === "pending" && (
+                          <button
+                            onClick={() => handleValidateCharge(charge.id)}
+                            disabled={validateCharge.isPending}
+                            className="w-full inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-100 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-200 disabled:opacity-50"
+                          >
+                            {validateCharge.isPending ? (
+                              <Loader2 size={12} className="animate-spin" />
+                            ) : (
+                              <CheckCircle size={14} />
                             )}
-                          </td>
+                            Validate
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Desktop / tablet: table */}
+                  <div className="mt-4 hidden sm:block overflow-x-auto">
+                    <table className="w-full min-w-[600px] border-collapse text-sm">
+                      <thead className="text-xs font-medium uppercase">
+                        <tr>
+                          <th className="px-4 py-3 text-left">Title</th>
+                          <th className="px-4 py-3 text-right">Amount</th>
+                          <th className="px-4 py-3 text-left">Due Date</th>
+                          <th className="px-4 py-3 text-center">Status</th>
+                          <th className="px-4 py-3 text-right">Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody className="divide-y">
+                        {charges.map((charge) => (
+                          <tr key={charge.id} className="transition hover:bg-slate-50/50">
+                            <td className="px-4 py-3 font-medium">{charge.title}</td>
+                            <td className="px-4 py-3 text-right font-medium">
+                              {new Intl.NumberFormat("fr-FR", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              }).format(charge.amount)}{" "}
+                              MAD
+                            </td>
+                            <td className="px-4 py-3">
+                              {new Intl.DateTimeFormat("fr-FR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }).format(new Date(charge.due_date))}
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <ChargeBadge status={charge.status} />
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              {charge.status === "pending" && (
+                                <button
+                                  onClick={() => handleValidateCharge(charge.id)}
+                                  disabled={validateCharge.isPending}
+                                  className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-200 disabled:opacity-50"
+                                >
+                                  {validateCharge.isPending ? (
+                                    <Loader2 size={12} className="animate-spin" />
+                                  ) : (
+                                    <CheckCircle size={14} />
+                                  )}
+                                  Validate
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
               )}
             </div>
           </div>

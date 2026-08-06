@@ -7,14 +7,12 @@ export const authorize =(
     const user = (req as any).user;
 
     if (!user) {
-      console.log(req.user);
       return res.status(401).json({
         success: false,
         message: "Unauthorized",
       }); }
 
     if (!roles.includes(user.role)) {
-      console.log(req.user?.role);
       return res.status(403).json({
         success: false,
         message: "Forbidden",

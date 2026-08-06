@@ -33,14 +33,14 @@ function StatsSummary({ incidents }: { incidents: Incident[] }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+    <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className={`rounded-xl px-4 py-3 text-center ring-1 ring-black/5 ${stat.bg}`}
+          className={`text-slate-900 rounded-xl px-2.5 py-2.5 text-center ring-1 ring-black/5 sm:px-4 sm:py-3 ${stat.bg}`}
         >
-          <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
-          <p className="text-xs font-medium uppercase tracking-wider text-slate-700">
+          <p className="text-lg font-bold sm:text-xl lg:text-2xl">{stat.value}</p>
+          <p className="text-[10px] font-medium uppercase tracking-wider text-slate-900 sm:text-[11px] lg:text-xs">
             {stat.label}
           </p>
         </div>
@@ -52,12 +52,12 @@ function StatsSummary({ incidents }: { incidents: Incident[] }) {
 // ─── Skeleton ──────────────────────────────────────────────────────────────
 function IncidentsSkeleton() {
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="space-y-3 sm:space-y-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="rounded-2xl border p-5 shadow-sm">
-            <div className="flex items-start justify-between">
-              <div className="space-y-3 flex-1">
+          <div key={i} className="rounded-xl sm:rounded-2xl border p-3.5 shadow-sm sm:p-5">
+            <div className="flex items-start justify-between gap-2">
+              <div className="space-y-3 flex-1 min-w-0">
                 <div className="h-5 w-3/4 animate-pulse rounded" />
                 <div className="flex gap-2">
                   <div className="h-6 w-16 animate-pulse rounded-full" />
@@ -70,7 +70,7 @@ function IncidentsSkeleton() {
                   <div className="h-3 w-20 animate-pulse rounded" />
                 </div>
               </div>
-              <div className="h-8 w-8 animate-pulse rounded-full" />
+              <div className="h-8 w-8 animate-pulse rounded-full shrink-0" />
             </div>
           </div>
         ))}
@@ -127,11 +127,13 @@ export default function IncidentsPage() {
   return (
     <div className="min-h-screen">
       {/* ─── Header ─── */}
-      <div className="border-b sticky top-0 z-10">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h1 className="text-4xl font-bold tracking-tight">Incidents</h1>
+      <div className="border-b sticky top-0 z-10 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-3 py-3 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+                Incidents
+              </h1>
               <p className="mt-0.5 text-sm">
                 {isLoading
                   ? "Chargement..."
@@ -141,17 +143,19 @@ export default function IncidentsPage() {
               </p>
             </div>
             {user?.role === "owner" && (
-            <Link
-              to={incidentNavigation.create(user?.role)}
-              className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-orange-200/50 transition hover:bg-orange-600 hover:shadow-orange-300/50 active:scale-95"
-            >
-              <Plus size={18} />
-              Déclarer un incident
-            </Link> )         }
-          </div>  
+              <Link
+                to={incidentNavigation.create(user?.role)}
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-orange-200/50 transition hover:bg-orange-600 hover:shadow-orange-300/50 active:scale-95"
+              >
+                <Plus size={18} />
+                Déclarer un incident
+              </Link>
+            )}
+          </div>
+
           {/* ─── Statistics ─── */}
           {!isLoading && !isError && filteredIncidents.length > 0 && (
-            <div className="mt-4">
+            <div className="mt-3 sm:mt-4">
               <StatsSummary incidents={filteredIncidents} />
             </div>
           )}
@@ -159,29 +163,29 @@ export default function IncidentsPage() {
       </div>
 
       {/* ─── Content ─── */}
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
         {isLoading ? (
           <IncidentsSkeleton />
         ) : isError ? (
-          <div className="flex flex-col items-center justify-center rounded-3xl border py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border py-10 px-4 text-center sm:py-16">
             <AlertCircle size={40} />
-            <h2 className="mt-3 text-lg font-semibold">
+            <h2 className="mt-3 text-base sm:text-lg font-semibold">
               Impossible de charger les incidents
             </h2>
-            <p className="mt-1 text-sm">
+            <p className="mt-1 text-sm break-words max-w-sm">
               {error instanceof Error ? error.message : "Erreur inconnue"}
             </p>
             <button
               onClick={() => refetch()}
-              className="mt-4 rounded-xl bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 active:scale-95"
+              className="mt-4 w-full sm:w-auto rounded-xl bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 active:scale-95"
             >
               Réessayer
             </button>
           </div>
         ) : filteredIncidents.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed py-20 text-center">
+          <div className="flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border-2 border-dashed py-12 px-4 text-center sm:py-20">
             <AlertCircle size={40} />
-            <h2 className="mt-4 text-xl font-semibold">Aucun incident</h2>
+            <h2 className="mt-4 text-lg sm:text-xl font-semibold">Aucun incident</h2>
             <p className="mt-1 max-w-sm text-sm">
               {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || residenceFilter !== "all"
                 ? "Aucun incident ne correspond à vos filtres."
@@ -200,31 +204,30 @@ export default function IncidentsPage() {
                 Effacer tous les filtres
               </button>
             )}
-            {user?.role==="owner" && (
-            <Link
-              to={incidentNavigation.create(user?.role)}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-orange-500 
-              px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600
-               active:scale-95"
-            >
-              <Plus size={18} />
-              Déclarer le premier incident
-            </Link>    )}
+            {user?.role === "owner" && (
+              <Link
+                to={incidentNavigation.create(user?.role)}
+                className="mt-6 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 active:scale-95"
+              >
+                <Plus size={18} />
+                Déclarer le premier incident
+              </Link>
+            )}
           </div>
         ) : (
           <div className="space-y-3">
             {filteredIncidents.map((incident) => (
               <div
                 key={incident.id}
-                className="group rounded-2xl border p-5 shadow-sm transition hover:shadow-md"
+                className="group rounded-xl sm:rounded-2xl border p-3.5 shadow-sm transition hover:shadow-md sm:p-5"
               >
-                <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
                   <Link
                     to={incidentNavigation.detail(incident.id, user?.role)}
                     className="min-w-0 flex-1"
                   >
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="truncate text-base font-semibold transition group-hover:text-orange-600">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <h3 className="text-sm font-semibold break-words transition group-hover:text-orange-600 sm:text-base sm:truncate">
                         {incident.title}
                       </h3>
                       <IncidentStatusBadge status={incident.status} />
@@ -242,18 +245,18 @@ export default function IncidentsPage() {
                         {incident.priority}
                       </span>
                     </div>
-                    <p className="mt-1 line-clamp-2 text-sm">
+                    <p className="mt-1.5 text-sm break-words whitespace-pre-wrap sm:line-clamp-2 sm:whitespace-normal">
                       {incident.description}
                     </p>
-                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:gap-x-4">
                       {incident.type && (
                         <span className="flex items-center gap-1">
-                          <Tag size={12} />
-                          {incident.type}
+                          <Tag size={12} className="shrink-0" />
+                          <span className="break-words">{incident.type}</span>
                         </span>
                       )}
                       <span className="flex items-center gap-1">
-                        <Calendar size={12} />
+                        <Calendar size={12} className="shrink-0" />
                         {new Date(incident.created_at).toLocaleDateString("fr-FR", {
                           day: "2-digit",
                           month: "2-digit",
@@ -262,22 +265,23 @@ export default function IncidentsPage() {
                       </span>
                     </div>
                   </Link>
-                  <div className="flex items-center gap-1">
+
+                  <div className="flex items-center gap-1 border-t border-slate-100 pt-2 sm:border-0 sm:pt-0">
                     <button
                       onClick={() => handleDelete(incident.id)}
                       disabled={deletingId === incident.id}
-                      className="rounded-full p-1.5 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                      className="rounded-full p-2.5 sm:p-1.5 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                       title="Supprimer"
                     >
                       {deletingId === incident.id ? (
                         <Loader2 size={16} className="animate-spin" />
                       ) : (
-                        <Trash2 size={22} className="text-red-500" />
+                        <Trash2 size={18} className="text-red-500 sm:size-[22px]" />
                       )}
                     </button>
                     <ChevronRight
                       size={20}
-                      className="transition group-hover:translate-x-0.5 group-hover:text-orange-500"
+                      className="ml-auto sm:ml-0 transition group-hover:translate-x-0.5 group-hover:text-orange-500"
                     />
                   </div>
                 </div>

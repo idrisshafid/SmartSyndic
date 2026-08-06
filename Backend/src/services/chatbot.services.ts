@@ -14,7 +14,6 @@ import { pool } from "../database/db";
 
 const genAI =     new GoogleGenerativeAI  ( process.env.GEMINI_API_KEY!);
 
-//const model =genAI.getGenerativeModel({  model: "gemini-1.5-flash-latest" }) ;
  const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
 
 // ======================================
@@ -24,7 +23,7 @@ const genAI =     new GoogleGenerativeAI  ( process.env.GEMINI_API_KEY!);
 export const extractFilters = async (
     message:string
 ):Promise<ChatbotExtraction> => {
-console.log(   "GEMINI KEY:",process.env.GEMINI_API_KEY);
+
 const prompt = `
 
 You are an apartment search assistant.
@@ -80,9 +79,7 @@ try {
 
 }   catch(error) {
 
-    console.error("Gemini JSON ERROR",text);
-
-    throw new Error(  "Invalid AI response"  ) ;  }
+    throw new Error(  "Aucun appartment found"  ) ;  }
 };
 
 // ======================================

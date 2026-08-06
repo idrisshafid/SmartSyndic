@@ -37,7 +37,7 @@ export default function OwnerSidebar() {
           <img
           src={logo}
            alt="SGC Logo"
-           className="h-13 w-auto flex items-center"/>
+           className="h-9 w-9 flex items-center"/>
 
         {!isCollapsed && (
           <h2 className="text-sm font-bold ">Smart Syndic</h2>

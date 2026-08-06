@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Trash2, Upload, X, ImageOff } from "lucide-react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { ArrowLeft, Trash2, Upload, X, ImageOff, Loader2 } from "lucide-react";
 
 import {
   useResidencePhotos,
@@ -10,6 +10,7 @@ import {
 
 export default function ResidencePhotosPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError } = useResidencePhotos(id ?? "");
   const uploadMutation = useUploadResidencePhoto();
@@ -17,6 +18,7 @@ export default function ResidencePhotosPage() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   if (!id) {
     return (
@@ -41,31 +43,39 @@ export default function ResidencePhotosPage() {
     setPreview(null);
   };
 
-  const handleUpload = () => {
-    if (!selectedFile) return;
-
-    const formData = new FormData();
-    formData.append("photo", selectedFile);
-
-    uploadMutation.mutate(
-      { id, formData },
-      { onSuccess: clearSelection }
-    );
-  };
-
   const handleDelete = (photoId: string) => {
     if (!window.confirm("Remove this photo?")) return;
     deleteMutation.mutate({ id, photoId });
   };
 
+  // ─── Bouton unique : upload si fichier sélectionné, puis navigation ────
+  const handleFinish = async () => {
+    if (selectedFile) {
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("photo", selectedFile);
+        await uploadMutation.mutateAsync({ id, formData });
+        clearSelection();
+      } catch (error) {
+        console.error("Upload failed:", error);
+        setIsUploading(false);
+        return;
+      }
+      setIsUploading(false);
+    }
+    // Navigation vers le détail
+    navigate(`/syndic/residences/${id}/detail`);
+  };
+
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen py-3">
       <div className="mx-auto max-w-4xl px-6">
         <Link
           to={`/syndic/residences/${id}/detail`}
-          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium transition"
+          className="mb-4 inline-flex items-center gap-1.5 text-xm font-medium transition"
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={22} />
           Back to residence
         </Link>
 
@@ -75,10 +85,13 @@ export default function ResidencePhotosPage() {
             Add clear, well-lit photos to help residents recognize the property.
           </p>
 
-          {/* UPLOAD */}
-          <div className="mt-8 rounded-2xl border border-dashed p-6">
+          {/* UPLOAD ZONE (sans bouton "Upload Photo") */}
+          <div className="mt-8 rounded-2xl border border-dashed 
+              border-orange-500 p-6">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <label className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition sm:w-auto">
+              <label className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border
+              border-orange-500
+               px-4 py-1 text-sm font-medium transition sm:w-auto">
                 <Upload size={16} />
                 Choose file
                 <input
@@ -105,25 +118,17 @@ export default function ResidencePhotosPage() {
                   </button>
                 </div>
               )}
-
-              <button
-                onClick={handleUpload}
-                disabled={!selectedFile || uploadMutation.isPending}
-                className="w-full rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-50 sm:w-auto"
-              >
-                {uploadMutation.isPending ? "Uploading..." : "Upload Photo"}
-              </button>
             </div>
 
             {uploadMutation.isError && (
-              <p className="mt-3 text-sm">
+              <p className="mt-3 text-sm text-red-500">
                 Upload failed. Please try again.
               </p>
             )}
           </div>
 
           {/* GALLERY */}
-          <div className="mt-8">
+          <div className="mt-6">
             {isLoading && (
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {[1, 2, 3, 4].map((item) => (
@@ -142,7 +147,8 @@ export default function ResidencePhotosPage() {
             )}
 
             {!isLoading && !isError && photos.length === 0 && (
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed py-12 text-center">
+              <div className="flex flex-col items-center justify-center
+               rounded-2xl border border-dashed py-8 text-center">
                 <ImageOff size={28} />
                 <p className="mt-3 text-sm">
                   No photos yet. Upload your first one above.
@@ -177,13 +183,24 @@ export default function ResidencePhotosPage() {
           </div>
         </div>
 
-        <Link
-          to={`/syndic/residences/${id}/detail`}
-          className="mt-3 inline-flex items-center gap-1.5 rounded-3xl bg-orange-500 px-4 py-3 font-medium text-white transition hover:bg-orange-600"
+        {/* ─── BOUTON UNIQUE ──────────────────────────────────────────────── */}
+        <button
+          onClick={handleFinish}
+          disabled={isUploading || uploadMutation.isPending}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-3xl bg-orange-500 px-4 py-3 font-medium text-white transition hover:bg-orange-600 disabled:opacity-50"
         >
-          <ArrowLeft size={22} />
-          Complete setup
-        </Link>
+          {isUploading || uploadMutation.isPending ? (
+            <>
+              <Loader2 size={22} className="animate-spin" />
+              Uploading...
+            </>
+          ) : (
+            <>
+              <ArrowLeft size={22} className="rotate-180" />
+              Complete setup
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

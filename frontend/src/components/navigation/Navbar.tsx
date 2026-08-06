@@ -65,7 +65,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-4">
         {/* Left: Logo + Desktop Nav */}
         <div className="flex items-center gap-8">
           <Link
@@ -76,12 +76,13 @@ export default function Navbar() {
               <img
                 src={logo}
                 alt="SGC Logo"
-                className="h-13 w-auto flex items-center"
+                className="h-12 w-auto flex items-center"
               />
             </div>
-            <p className="text-[15px] font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+            {user.role ==="admin"   || user.role ==="syndic"   && 
+            <p className="text-[13px] font-semibold tracking-tight text-slate-900 dark:text-slate-100">
               Smart Syndic
-            </p>
+            </p> }
           </Link>
 
           <nav className="hidden items-center gap-0.5 lg:flex">

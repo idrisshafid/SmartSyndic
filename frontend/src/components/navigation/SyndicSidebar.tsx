@@ -48,7 +48,7 @@ export default function SyndicSidebar() {
                    <img
           src={logo}
            alt="SGC Logo"
-           className="h-13 w-auto flex items-center"/>
+           className="h-10 w-auto flex items-center"/>
            
         {!isCollapsed && (
           

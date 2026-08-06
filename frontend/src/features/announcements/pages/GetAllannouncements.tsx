@@ -147,7 +147,7 @@ export default function AnnouncementsPage() {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
         <AlertCircle size={48} className="text-red-500" />
-        <h2 className="text-xl font-semibold ">Accès refusé</h2>
+        <h2 className="text-xl font-semibold">Accès refusé</h2>
         <p className="max-w-sm text-sm text-slate-500">
           Vous n'avez pas les permissions nécessaires pour consulter cette page.
         </p>
@@ -157,7 +157,7 @@ export default function AnnouncementsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center">
+      <div className="flex min-h-[50vh] items-center justify-center px-4">
         <Loader2 size={32} className="animate-spin text-orange-500" />
       </div>
     );
@@ -165,10 +165,9 @@ export default function AnnouncementsPage() {
 
   if (hasError) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-3xl 
-      border border-red-200 bg-red-50/50 p-12 text-center">
+      <div className="mx-4 flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border border-red-200 bg-red-50/50 p-6 sm:p-12 text-center">
         <AlertCircle size={40} className="text-red-500" />
-        <h2 className="mt-4 text-lg font-semibold text-red-700">
+        <h2 className="mt-4 text-base sm:text-lg font-semibold text-red-700">
           Impossible de charger les annonces
         </h2>
         <p className="mt-2 text-sm text-red-600">
@@ -182,13 +181,12 @@ export default function AnnouncementsPage() {
 
   if (residences.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-3xl border-2
-       border-dashed border-slate-300 py-16 text-center">
+      <div className="mx-4 flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-300 py-10 sm:py-16 px-4 text-center">
         <Building2 size={48} className="text-slate-400" />
-        <h2 className="mt-4 text-xl font-semibold text-slate-800">
+        <h2 className="mt-4 text-lg sm:text-xl font-semibold text-slate-800">
           {isSyndic ? "Aucune résidence" : "Aucune résidence associée"}
         </h2>
-        <p className="mt-2 max-w-sm text-sm ">
+        <p className="mt-2 max-w-sm text-sm">
           {isSyndic
             ? "Vous ne gérez aucune résidence. Créez-en une avant de publier une annonce."
             : "Vous ne possédez pas encore d’appartement, ou aucune résidence n’est rattachée à vos biens."}
@@ -196,8 +194,7 @@ export default function AnnouncementsPage() {
         {isSyndic && (
           <Link
             to="/syndic/residences/create"
-            className="mt-6 rounded-xl bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white
-             hover:bg-orange-600"
+            className="mt-6 w-full sm:w-auto rounded-xl bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white hover:bg-orange-600 text-center"
           >
             Créer une résidence
           </Link>
@@ -209,14 +206,15 @@ export default function AnnouncementsPage() {
   // ─── 10. Rendu principal ─────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen  py-8">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight ">
+    <div className="min-h-screen py-4 sm:py-6 lg:py-8">
+      <div className="mx-auto max-w-5xl px-3 sm:px-4 lg:px-6">
+        {/* Header */}
+        <div className="mb-5 sm:mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
               Annonces
             </h1>
-            <p className="mt-1 text-sm ">
+            <p className="mt-1 text-sm">
               {allAnnouncements.length} annonce
               {allAnnouncements.length > 1 ? "s" : ""}
             </p>
@@ -225,8 +223,7 @@ export default function AnnouncementsPage() {
           {canManage && (
             <Link
               to="/syndic/announcements/new"
-              className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5
-               py-2.5 text-sm font-semibold text-white shadow-sm shadow-orange-200/50 transition hover:bg-orange-600 hover:shadow-orange-300/50"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-orange-200/50 transition hover:bg-orange-600 hover:shadow-orange-300/50"
             >
               <Plus size={18} />
               Nouvelle annonce
@@ -235,12 +232,11 @@ export default function AnnouncementsPage() {
         </div>
 
         {allAnnouncements.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-3xl 
-          border-2 border-dashed border-slate-300 py-16 text-center">
-            <p className="text-sm ">Aucune annonce pour le moment.</p>
+          <div className="flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-300 py-10 sm:py-16 px-4 text-center">
+            <p className="text-sm">Aucune annonce pour le moment.</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {allAnnouncements.map((announcement) => (
               <AnnouncementCard
                 key={announcement.id}
@@ -291,41 +287,46 @@ function AnnouncementCard({
 
   return (
     <div
-      className={`group rounded-2xl border border-slate-200  p-5 
-        shadow-sm transition hover:shadow-md ${
+      className={`group rounded-xl sm:rounded-2xl border border-slate-200 p-3.5 sm:p-5 shadow-sm transition hover:shadow-md ${
         is_pinned ? "border-orange-300" : ""
       }`}
     >
-      <div className="flex flex-wrap items-start justify-between gap-3">
+      {/* Stack on phone: content then actions */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-3">
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          {/* Badges + date — wrap fully visible */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {is_pinned && (
-              <span className="inline-flex items-center gap-1 rounded-full
-               bg-orange-100 px-2.5 py-0.5 text-xs font-semibold text-orange-700">
-                <Pin size={12} />
+              <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-xs font-semibold text-orange-700">
+                <Pin size={12} className="shrink-0" />
                 Épinglée
               </span>
             )}
             {residenceName && (
-              <span className="inline-flex items-center gap-1 rounded-full 
-              bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
-                <Building2 size={12} />
-                {residenceName}
+              <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-slate-100 px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-xs font-medium text-slate-700">
+                <Building2 size={12} className="shrink-0" />
+                <span className="truncate">{residenceName}</span>
               </span>
             )}
-            <span className="text-sm  ">{formatDate(created_at)}</span>
-          </div> <div className="p-1.5"></div>
-          <h3 className="mt-3 text-lg font-semibold bg-red ">{title}</h3>
-          <p className="mt-2 line-clamp-3 text-sm ">{content}</p>
+            <span className="text-xs sm:text-sm text-slate-500">
+              {formatDate(created_at)}
+            </span>
+          </div>
+
+          <h3 className="mt-2 sm:mt-3 text-base sm:text-lg font-semibold break-words">
+            {title}
+          </h3>
+          <p className="mt-1.5 sm:mt-2 text-sm break-words whitespace-pre-wrap sm:line-clamp-3">
+            {content}
+          </p>
         </div>
 
         {canManage && (
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-1 border-t border-slate-100 pt-2 sm:border-0 sm:pt-0">
             <button
               onClick={() => onTogglePin(id)}
               disabled={isToggling}
-              className="rounded-full p-2 transition hover:bg-slate-100 
-              hover:text-slate-700"
+              className="rounded-full p-2.5 sm:p-2 transition hover:bg-slate-100 hover:text-slate-700"
               title={is_pinned ? "Désépingler" : "Épingler"}
             >
               {isToggling ? (
@@ -339,8 +340,7 @@ function AnnouncementCard({
 
             <button
               onClick={() => onEdit(id)}
-              className="rounded-full p-2  transition hover:bg-slate-100 
-              hover:text-orange-600"
+              className="rounded-full p-2.5 sm:p-2 transition hover:bg-slate-100 hover:text-orange-600"
               title="Modifier"
             >
               <Pencil size={16} />
@@ -349,13 +349,13 @@ function AnnouncementCard({
             <button
               onClick={() => onDelete(id)}
               disabled={isDeleting}
-              className="rounded-full p-2  transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+              className="rounded-full p-2.5 sm:p-2 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
               title="Supprimer"
             >
               {isDeleting ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
-                <Trash2 size={22} className="text-red-500"  />
+                <Trash2 size={18} className="text-red-500 sm:h-[22px] sm:w-[22px]" />
               )}
             </button>
           </div>

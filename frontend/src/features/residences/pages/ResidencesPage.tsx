@@ -11,22 +11,17 @@ export default function PublicResidencesPage() {
   const total = data?.data?.total ?? residences.length;
 
   return (
-    <div className="w-full space-y-6 pb-12">
+    <div className="w-full px-4 lg:py-3 sm:px-6 space-y-6 pb-12">
       {/* COMPACT PAGE HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
-           
         <div>
-      <h1 className="mt-2 px-4 text-2xl font-semibold text-center tracking-tight p-3 pl-22">
-         Explore available residences and find the perfect apartment for you.
-            </h1>
-
-          <div/>
-    
+          <h1 className="mt-2 text-xl sm:text-2xl font-semibold text-center tracking-tight">
+            Explore available residences and find the perfect apartment for you.
+          </h1>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 
-          py-1 text-xs font-semibold text-slate-700">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
             <Sparkles size={13} className="text-indigo-600" />
             {isLoading
               ? "Chargement..."
@@ -37,7 +32,7 @@ export default function PublicResidencesPage() {
 
       {/* SKELETON LOADING STATE */}
       {isLoading && (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
             <div
               key={item}
@@ -55,7 +50,7 @@ export default function PublicResidencesPage() {
 
       {/* ERROR STATE */}
       {isError && (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-rose-200 bg-rose-50/50 py-16 text-center">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-rose-200 bg-rose-50/50 py-16 text-center px-4">
           <h2 className="text-base font-semibold text-rose-900">
             Impossible de charger les résidences
           </h2>
@@ -67,7 +62,7 @@ export default function PublicResidencesPage() {
 
       {/* EMPTY STATE */}
       {!isLoading && !isError && residences.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white py-20 text-center">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white py-20 text-center px-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <Building2 size={24} />
           </div>
@@ -82,7 +77,7 @@ export default function PublicResidencesPage() {
 
       {/* RESIDENCES CARD GRID */}
       {!isLoading && !isError && residences.length > 0 && (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {residences.map((residence) => (
             <ResidenceCard key={residence.id} residence={residence} />
           ))}

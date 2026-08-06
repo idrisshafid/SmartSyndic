@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { ArrowLeft, Loader2, MapPin, Pencil } from "lucide-react";
-
+import z from "zod";
 import {
   residenceSchema,
   type ResidenceFormData,
@@ -39,22 +39,12 @@ export default function EditResidencePage() {
     handleSubmit,
     setValue,
     reset,
-
     formState: { errors },
-  } = useForm<ResidenceFormData>({
-    resolver: zodResolver(residenceSchema),
-    defaultValues: {
-      name: "",
-      address: "",
-      city: "",
-      postal_code: "",
-      description: "",
-      latitude: undefined,
-      longitude: undefined,
-    },
-  });
+  } = useForm<
+    z.input<typeof residenceSchema>,
+    z.output<typeof residenceSchema>
+  >({ resolver: zodResolver(residenceSchema) });
 
-  // ─── Pré‑remplir le formulaire UNE SEULE FOIS ──────────────────────────
   useEffect(() => {
     if (!residence) return;
 
@@ -104,12 +94,11 @@ export default function EditResidencePage() {
       }
     );
   };
-  
 
   // ─── États de chargement / erreur ──────────────────────────────────────
   if (!id) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <p className="font-medium">Residence not found.</p>
       </div>
     );
@@ -117,7 +106,7 @@ export default function EditResidencePage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <Loader2 size={32} className="animate-spin text-orange-500" />
       </div>
     );
@@ -125,7 +114,7 @@ export default function EditResidencePage() {
 
   if (isError || !residence) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <p className="font-medium text-red-500">Couldn't load residence.</p>
       </div>
     );
@@ -133,36 +122,36 @@ export default function EditResidencePage() {
 
   // ─── Rendu ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen py-12">
-      <div className="mx-auto max-w-2xl px-6">
+    <div className="min-h-screen py-6 sm:py-10 lg:py-12">
+      <div className="mx-auto w-full max-w-2xl px-4 sm:px-6">
         <Link
           to={`/syndic/residences/${id}/detail`}
-          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium transition hover:text-orange-600"
+          className="mb-4 sm:mb-6 inline-flex items-center gap-1.5 text-sm font-medium transition hover:text-orange-600"
         >
           <ArrowLeft size={16} />
           Back to residence
         </Link>
 
-        <div className="rounded-3xl border p-8 shadow-sm">
-          <h2 className="text-2xl font-bold">Edit residence</h2>
+        <div className="rounded-2xl sm:rounded-3xl border p-4 sm:p-6 lg:p-8 shadow-sm">
+          <h2 className="text-xl sm:text-2xl font-bold">Edit residence</h2>
           <p className="mt-1 text-sm">Update the residence details below.</p>
 
           {updateMutation.isError && (
-            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+            <div className="mt-4 sm:mt-6 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600 break-words">
               {updateMutation.error instanceof Error
                 ? updateMutation.error.message
                 : "Something went wrong. Please try again."}
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-5 sm:mt-6 space-y-4 sm:space-y-5">
             <div>
-              <label className="mb-2 block text-sm font-medium">
+              <label className="mb-1.5 sm:mb-2 block text-sm font-medium">
                 Residence name
               </label>
               <input
                 {...register("name")}
-                className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none transition ${
                   errors.name ? "border-red-400" : "border"
                 }`}
               />
@@ -173,19 +162,19 @@ export default function EditResidencePage() {
 
             {/* Localisation */}
             <div>
-              <label className="mb-2 block text-sm font-medium">Location</label>
+              <label className="mb-1.5 sm:mb-2 block text-sm font-medium">Location</label>
 
               {!displayLocation ? (
                 <button
                   type="button"
                   onClick={() => setIsLocationModalOpen(true)}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed py-4 text-sm font-medium transition hover:border-orange-400 hover:text-orange-600"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed py-3.5 sm:py-4 text-sm font-medium transition hover:border-orange-400 hover:text-orange-600"
                 >
                   <MapPin size={16} />
                   Choose on Map
                 </button>
               ) : (
-                <div className="flex items-center justify-between rounded-xl border p-4">
+                <div className="flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
                   <div className="flex min-w-0 items-start gap-3">
                     <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-50 text-orange-600">
                       <MapPin size={15} />
@@ -194,7 +183,7 @@ export default function EditResidencePage() {
                       <p className="truncate text-sm font-medium">
                         {displayLocation.address ?? "Location set"}
                       </p>
-                      <p className="mt-0.5 font-mono text-xs">
+                      <p className="mt-0.5 break-all font-mono text-xs">
                         {Number(displayLocation.latitude).toFixed(5)},{" "}
                         {Number(displayLocation.longitude).toFixed(5)}
                       </p>
@@ -204,7 +193,7 @@ export default function EditResidencePage() {
                   <button
                     type="button"
                     onClick={() => setIsLocationModalOpen(true)}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-50"
+                    className="inline-flex w-full shrink-0 items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-orange-600 transition hover:bg-orange-50 sm:w-auto sm:py-2"
                   >
                     <Pencil size={13} />
                     Change
@@ -220,10 +209,10 @@ export default function EditResidencePage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium">Address</label>
+              <label className="mb-1.5 sm:mb-2 block text-sm font-medium">Address</label>
               <input
                 {...register("address")}
-                className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none transition ${
                   errors.address ? "border-red-400" : "border"
                 }`}
               />
@@ -232,12 +221,12 @@ export default function EditResidencePage() {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-medium">City</label>
+                <label className="mb-1.5 sm:mb-2 block text-sm font-medium">City</label>
                 <input
                   {...register("city")}
-                  className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                  className={`w-full rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none transition ${
                     errors.city ? "border-red-400" : "border"
                   }`}
                 />
@@ -246,22 +235,22 @@ export default function EditResidencePage() {
                 )}
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium">
+                <label className="mb-1.5 sm:mb-2 block text-sm font-medium">
                   Postal code
                 </label>
                 <input
                   {...register("postal_code")}
-                  className="w-full rounded-xl border px-4 py-3 outline-none transition"
+                  className="w-full rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none transition"
                 />
               </div>
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium">Description</label>
+              <label className="mb-1.5 sm:mb-2 block text-sm font-medium">Description</label>
               <textarea
                 {...register("description")}
                 rows={4}
-                className="w-full rounded-xl border p-3 outline-none transition"
+                className="w-full rounded-xl border p-3 text-sm sm:text-base outline-none transition"
               />
               {errors.description && (
                 <p className="mt-1 text-sm text-red-500">

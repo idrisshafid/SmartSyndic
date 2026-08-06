@@ -36,7 +36,7 @@ export const authLimiter = rateLimit({
 // ======================================
 export const chatbotLimiter = rateLimit({
   windowMs: 5 * 60 * 60 * 1000, // 1 hour
-  max: 5,
+  max: 2,
   standardHeaders: true,
   legacyHeaders: false,
   message: {

@@ -110,7 +110,7 @@ export default function ReservationDetailPage() {
 
   return (
     <div className="min-h-screen py-8">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+      <div className="mx-auto max-w-5xl px-1 sm:px-1">
         {/* ─── Navigation ─── */}
         <div className="mb-6 flex items-center justify-between">
           <Link
@@ -132,7 +132,8 @@ export default function ReservationDetailPage() {
             {/* Visitor Card */}
             <div className="rounded-2xl p-6 shadow-sm border">
               <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-xl font-bold">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center
+                 rounded-full bg-orange-500 text-white text-xl font-bold">
                   {reservation.visitor_name.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">

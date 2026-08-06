@@ -95,18 +95,14 @@ export const update = async (
   syndicId: string,
   data: UpdateResidenceInput
 ) => {
-  const isOwner =
-    await residenceModel.checkOwnership( residenceId, syndicId);
+  const isOwner = await residenceModel.checkOwnership( residenceId, syndicId);
 
   if (!isOwner) {
-    throw new Error(
-      "You are not allowed to modify this residence." ); }
+    throw new Error(   "You are not allowed to modify this residence." ); }
 
   const residence =
     await residenceModel.update(
-      residenceId,
-      data
-    );
+      residenceId,  data);
 
   if (!residence) {
     throw new Error(
