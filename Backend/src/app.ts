@@ -9,15 +9,15 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://smart-syndic-h46p.vercel.app",
     credentials: true,
   })
 );
 
 
 // Security middleware FIRST
-//app.use(helmet());
-//app.use(generalLimiter);
+  app.use(helmet());
+ app.use(generalLimiter);
 
 app.use(cors());
 app.use(express.json());
