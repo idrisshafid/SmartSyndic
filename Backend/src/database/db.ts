@@ -7,6 +7,9 @@ export const pool = new Pool({
   user: env.pgUser,
   password: env.pgPassword,
   database: env.pgDatabase,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 // test connection
