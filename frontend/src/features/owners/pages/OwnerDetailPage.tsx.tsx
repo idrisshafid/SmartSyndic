@@ -262,7 +262,10 @@ export default function OwnerDetailPage() {
       await validateCharge.mutateAsync(chargeId);
       refetchCharges();
     } catch (err) {
-      alert(err.message || "Erreur lors de la validation.");
+     const message =   err instanceof Error
+      ? err.message
+      : "Erreur lors de la validation.";
+         alert(message);
     }
   };
 

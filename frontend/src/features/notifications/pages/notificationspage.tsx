@@ -72,9 +72,11 @@ export default function NotificationsPage() {
   const deleteAllNotifications = useDeleteAllNotifications();
 
   const unreadCount = unreadCountData?.unread ?? 0;
-
+if (!user) {
+  return null;
+}
   // ─── Base path selon le rôle ──────────────────────────────────────────────
-  const basePath = user?.role === "syndic" ? "/syndic" : user?.role === "owner" ? "/owner" : "";
+  const basePath = user.role === "syndic" ? "/syndic" : user.role === "owner" ? "/owner" : "";
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
 
@@ -105,6 +107,9 @@ export default function NotificationsPage() {
 
     // Navigation si référence existe
     if (notification.reference_id && notification.reference_type) {
+      if (!user) {
+         return null;
+        }
       const routes: Record<string, string> = {
         incident: `/${user.role}/incidents/${notification.reference_id}`,
         reservation: `${basePath}/reservations/${notification.reference_id}`,

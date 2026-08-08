@@ -24,7 +24,7 @@ export default function CreateResidencePage() {
     getValues,
     formState: { errors },
   } = useForm<
-    z.input<typeof residenceSchema>,
+    z.input<typeof residenceSchema>,  undefined, 
     z.output<typeof residenceSchema>
   >({
     resolver: zodResolver(residenceSchema),

@@ -61,8 +61,10 @@ export function ValidatePaymentModal({
       reset();
       onClose();
     } catch (err) {
-      setError(err.message || "Une erreur est survenue lors de la validation du paiement.");
-    }
+  setError(   err instanceof Error  ? err.message
+    
+    : "Une erreur est survenue lors de la validation du paiement.");
+}
   };
 
   if (!isOpen) return null;

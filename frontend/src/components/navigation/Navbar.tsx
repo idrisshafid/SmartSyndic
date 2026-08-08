@@ -79,7 +79,7 @@ export default function Navbar() {
                 className="h-12 w-auto flex items-center"
               />
             </div>
-            {user.role ==="admin"   || user.role ==="syndic"   && 
+            {user?.role ==="admin"   || user?.role ==="syndic"   && 
             <p className="text-[13px] font-semibold tracking-tight text-slate-900 dark:text-slate-100">
               Smart Syndic
             </p> }

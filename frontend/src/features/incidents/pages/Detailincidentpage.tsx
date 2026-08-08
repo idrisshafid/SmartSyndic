@@ -272,8 +272,9 @@ function SectionCard({
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────
-
+import { useNavigate } from "react-router-dom";
 export default function IncidentDetailPage() {
+  const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
@@ -319,7 +320,10 @@ export default function IncidentDetailPage() {
   const handleStatusChange = () => {
     queryClient.invalidateQueries({ queryKey: ["incident", id] });
   };
-
+    if (!user) {
+  navigate("/");
+  return null;
+}
   if (isLoading) return <DetailsSkeleton />;
 
   if (isError || !incident) {
@@ -333,7 +337,7 @@ export default function IncidentDetailPage() {
           L&apos;incident que vous recherchez n&apos;existe pas ou a été supprimé.
         </p>
         <Link
-          to={incidentNavigation.list(user?.role)}
+          to={incidentNavigation.list(user.role)}
           className="mt-7 rounded-2xl bg-[#F97316] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition hover:bg-[#EA580C]"
         >
           Retour aux incidents
@@ -366,7 +370,7 @@ export default function IncidentDetailPage() {
         {/* Top bar */}
         <div className="mb-8 flex items-center justify-between">
           <Link
-            to={incidentNavigation.list(user?.role)}
+            to={incidentNavigation.list(user.role)}
             className="group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-sm transition hover:border-[#CBD5E1]"
           >
             <ArrowLeft
@@ -407,9 +411,9 @@ export default function IncidentDetailPage() {
                     )}
                   </div>
                 </div>
-             {user?.role === "owner" && (
+             {user.role === "owner" && (
                 <Link
-                  to={incidentNavigation.edit(incident.id, user?.role)}
+                  to={incidentNavigation.edit(incident.id, user.role)}
                   className="inline-flex items-center gap-2 rounded-2xl bg-[#F97316] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:bg-[#EA580C] active:scale-[0.98]"
                 >
                   <Edit size={15} />
@@ -562,7 +566,7 @@ export default function IncidentDetailPage() {
                 </h3>
                   
                 <div className="mt-5 space-y-2.5">
-                  {user?.role === "syndic" && (
+                  {user.role === "syndic" && (
 
                   <ChangeStatusButton
                     incidentId={incident.id}
@@ -571,15 +575,15 @@ export default function IncidentDetailPage() {
                   /> 
                   )}
 
-                    {user?.role === "owner" && (
+                    {user.role === "owner" && (
                   <Link
-                    to={incidentNavigation.edit(incident.id, user?.role)}
+                    to={incidentNavigation.edit(incident.id, user.role)}
                     className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#F97316] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:bg-[#EA580C] active:scale-[0.98]"
                   >
                     <Edit size={15} />
                     Modifier l&apos;incident
                   </Link> )}
-                  {user?.role === "owner" && (
+                  {user.role === "owner" && (
                   <label className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition hover:border-orange-200">
                     <Camera size={15} className="text-[#F97316]" />
                     Ajouter une photo
@@ -593,7 +597,7 @@ export default function IncidentDetailPage() {
                   </label>  )}
 
                   <Link
-                    to={incidentNavigation.list(user?.role)}
+                    to={incidentNavigation.list(user.role)}
                     className="flex w-full items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition hover:bg-[#F8FAFC]"
                   >
                     <ArrowLeft size={15} />

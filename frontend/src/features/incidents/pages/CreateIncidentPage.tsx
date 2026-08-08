@@ -112,6 +112,10 @@ export default function CreateIncidentPage() {
   const descriptionValue = useWatch({ control, name: "description" }) || "";
   const selectedPriority = useWatch({ control, name: "priority" });
   const user = useAuthStore((state) => state.user);
+  if (!user) {
+  navigate("/");
+  return null;
+}
 
   const goBack = () => {
     if (step === 1) {
@@ -142,8 +146,12 @@ export default function CreateIncidentPage() {
       setIncidentId(result.id);
       setStep(4);
     } catch (error) {
-      setSubmitError(error.message || "Erreur lors de la création de l'incident.");
-    }
+  setSubmitError(
+    error instanceof Error
+      ? error.message
+      : "Erreur lors de la création de l'incident."
+  );
+}
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +164,9 @@ export default function CreateIncidentPage() {
       }
       await refetchPhotos();
     } catch (error) {
-      alert(`Erreur lors de l'upload : ${error.message}`);
+      alert( `Erreur lors de l'upload : ${
+    error instanceof Error ? error.message : "Erreur inconnue"
+  }`);
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -170,14 +180,16 @@ export default function CreateIncidentPage() {
       await deletePhoto.mutateAsync(photoId);
       await refetchPhotos();
     } catch (error) {
-      alert(`Erreur lors de la suppression : ${error.message}`);
+      alert( `Erreur lors de la suppression : ${
+    error instanceof Error ? error.message : "Erreur inconnue"
+  }`);
     } finally {
       setDeletingPhotoId(null);
     }
   };
 
   const handleFinish = () => {
-    navigate(incidentNavigation.list(user?.role));
+    navigate(incidentNavigation.list(user.role  ));
   };
 
   const formData = getValues();

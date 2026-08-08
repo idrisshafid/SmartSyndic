@@ -399,7 +399,7 @@ export default function CreateApartmentWizardPage() {
               <Counter
                 label="Floor"
                 icon={Building2}
-                value={values.floor}
+                value={values.floor ?? 0}
                 onChange={(v) => setValue("floor", v, { shouldValidate: true })}
                 min={-2}
                 max={200}
@@ -455,7 +455,7 @@ export default function CreateApartmentWizardPage() {
 
               <Counter
                 label="Price per night"
-                value={values.price_per_night}
+                value={values.price_per_night ?? 0}
                 onChange={(v) =>
                   setValue("price_per_night", v, { shouldValidate: true })
                 }
@@ -532,7 +532,7 @@ export default function CreateApartmentWizardPage() {
               <Counter
                 label="Rooms"
                 icon={DoorClosed}
-                value={values.rooms}
+                value={values.rooms ?? 0}
                 onChange={(v) => setValue("rooms", v, { shouldValidate: true })}
                 min={1}
                 max={20}
@@ -540,7 +540,7 @@ export default function CreateApartmentWizardPage() {
               <Counter
                 label="Bedrooms"
                 icon={BedDouble}
-                value={values.bedrooms}
+                value={values.bedrooms ?? 0}
                 onChange={(v) =>
                   setValue("bedrooms", v, { shouldValidate: true })
                 }
@@ -550,7 +550,7 @@ export default function CreateApartmentWizardPage() {
               <Counter
                 label="Bathrooms"
                 icon={Bath}
-                value={values.bathrooms}
+                value={values.bathrooms ?? 0}
                 onChange={(v) =>
                   setValue("bathrooms", v, { shouldValidate: true })
                 }
@@ -560,7 +560,7 @@ export default function CreateApartmentWizardPage() {
               <Counter
                 label="Guest capacity"
                 icon={Users}
-                value={values.capacity}
+                value={values.capacity ?? 0}
                 onChange={(v) =>
                   setValue("capacity", v, { shouldValidate: true })
                 }

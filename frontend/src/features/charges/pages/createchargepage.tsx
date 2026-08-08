@@ -4,7 +4,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ArrowLeft, Loader2 } from "lucide-react";
-
+import axios from "axios";
 import { useCreateCharge } from "../hooks/usecharges";
 import { useAuthStore } from "@/stores/auth.store";
 import { useOwners } from "@/features/owners/hooks/owner.hooks";
@@ -92,7 +92,11 @@ export default function CreateChargePage() {
       await createCharge.mutateAsync(payload);
       navigate(-1);
     } catch (err) {
-      const backendMessage = err.response?.data?.message || err.message;
+     const backendMessage = axios.isAxiosError(err)
+    ? err.response?.data?.message || err.message
+    : err instanceof Error
+      ? err.message
+      : "Une erreur est survenue.";
       setError(backendMessage || "Erreur lors de la création de la charge.");
     }
   };

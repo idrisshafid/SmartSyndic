@@ -412,7 +412,7 @@ export default function ResidenceDetailPage() {
                   <ApartmentCard
                     key={apartment.id}
                     apartment={apartment}
-                    to={getApartmentDetailPath(apartment.id, user?.id)}
+                    to={getApartmentDetailPath(apartment.id, user?.role)}
                   />
                 ))}
               </div>

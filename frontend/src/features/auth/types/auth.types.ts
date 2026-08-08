@@ -12,7 +12,7 @@ export interface User {
 
  country?:string;
 
- role: "admin"| "syndic"| "owner";
+ role: "admin"| "syndic"| "owner" | undefined;
 
 }
 

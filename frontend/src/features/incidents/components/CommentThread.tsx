@@ -52,7 +52,11 @@ export default function CommentThread({
       await addComment.mutateAsync({ incidentId, comment: data.comment });
       reset();
     } catch (error) {
-      setSubmitError(error.message || "Erreur lors de l'ajout du commentaire.");
+  setSubmitError(
+    error instanceof Error
+      ? error.message
+      : "Erreur lors de l'ajout du commentaire."
+    );
     }
   };
 

@@ -117,7 +117,10 @@ onSuccess : () => {
 
  logoutStore();
 
- queryClient.clear() ;          }
+ queryClient.clear() ;   
+
+
+}
 
 });   };
 

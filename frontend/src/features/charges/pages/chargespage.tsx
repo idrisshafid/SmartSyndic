@@ -82,8 +82,10 @@ export default function ChargesPage() {
       await validateCharge.mutateAsync(chargeId);
       refetchCharges();
     } catch (err) {
-      setError(err.message || "Erreur lors de la validation.");
-    }
+      setError( err instanceof Error
+      ? err.message
+      : "Erreur lors de la validation." );
+       }
   };
 
   const handleDelete = async (chargeId: string) => {
@@ -93,8 +95,10 @@ export default function ChargesPage() {
       await deleteCharge.mutateAsync(chargeId);
       refetchCharges();
     } catch (err) {
-      setError(err.message || "Erreur lors de la suppression.");
-    }
+    
+      setError(  err instanceof Error   ? err.message
+      : "Erreur lors de la suppression."
+          );}
   };
 
   // ── Loading states ──

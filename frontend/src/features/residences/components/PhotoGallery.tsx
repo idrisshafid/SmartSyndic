@@ -82,7 +82,7 @@ export default function PhotoGallery({ residenceId }: PhotoGalleryProps) {
           {photos.map((photo) => (
             <img
               key={photo.id}
-              src={photo.url}
+              src={photo.photo_url}
               alt="Residence"
               className="h-44 w-full rounded-2xl object-cover"
             />

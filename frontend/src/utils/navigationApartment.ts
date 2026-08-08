@@ -28,8 +28,8 @@ export function getBookingPath(
 }
 
 export function getApartmentDetailPath(
-  apartmentId: string,
-  role?: string
+  apartmentId: string ,
+  role: string | undefined 
 ) {
   switch (role) {
     case "owner":

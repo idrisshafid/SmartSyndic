@@ -415,7 +415,7 @@ export default function EditApartmentWizardPage() {
               <Counter
                 label="Floor"
                 icon={Building2}
-                value={values.floor}
+                value={values.floor ?? 0}
                 onChange={(v) => setValue("floor", v, { shouldValidate: true })}
                 min={-2}
                 max={200}
@@ -544,7 +544,7 @@ export default function EditApartmentWizardPage() {
               <Counter
                 label="Rooms"
                 icon={DoorClosed}
-                value={values.rooms}
+                value={values.rooms ?? 0}
                 onChange={(v) => setValue("rooms", v, { shouldValidate: true })}
                 min={1}
                 max={20}
@@ -552,7 +552,7 @@ export default function EditApartmentWizardPage() {
               <Counter
                 label="Bedrooms"
                 icon={BedDouble}
-                value={values.bedrooms}
+                value={values.bedrooms ?? 0}
                 onChange={(v) =>
                   setValue("bedrooms", v, { shouldValidate: true })
                 }
@@ -562,7 +562,7 @@ export default function EditApartmentWizardPage() {
               <Counter
                 label="Bathrooms"
                 icon={Bath}
-                value={values.bathrooms}
+                value={values.bathrooms ?? 0}
                 onChange={(v) =>
                   setValue("bathrooms", v, { shouldValidate: true })
                 }
@@ -572,7 +572,7 @@ export default function EditApartmentWizardPage() {
               <Counter
                 label="Guest capacity"
                 icon={Users}
-                value={values.capacity}
+                value={values.capacity ?? 0}
                 onChange={(v) =>
                   setValue("capacity", v, { shouldValidate: true })
                 }

@@ -114,9 +114,14 @@ export default function CreatePaymentPage() {
         notes: data.notes || undefined,
       });
       navigate(-1);
-    } catch (err) {
-      setError(err.message || "Erreur lors de la validation du paiement.");
     }
+     catch (err) {
+      setError(
+      err instanceof Error
+      ? err.message
+      : "Erreur lors de la validation du paiement."
+     );
+   }
   };
 
   // ── Loading states ──

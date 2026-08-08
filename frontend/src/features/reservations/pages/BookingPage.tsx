@@ -35,7 +35,7 @@ const bookingFormSchema = z.object({
   notes: z.string().optional(),
 });
 
-type BookingFormData = z.infer<typeof bookingFormSchema>;
+type BookingFormData = z.output<typeof bookingFormSchema>;
 
 const STEPS = [
   { number: 1, label: "Date" },
@@ -104,7 +104,7 @@ const {
   formState: { errors, isSubmitting },
 } 
 = useForm <
-   z.input<typeof bookingFormSchema>,
+   z.input<typeof bookingFormSchema>,undefined ,
   z.output<typeof bookingFormSchema> 
   >  ({ resolver: zodResolver(bookingFormSchema),});
 
@@ -112,6 +112,10 @@ const {
 
   const goBack = () => {
     if (step === 1) {
+      if (!apartmentId) {
+  navigate("/");
+  return;
+}
       navigate(getApartmentDetailPath(apartmentId, user?.role));
     } else {
       setStep((s) => (s - 1) as 1 | 2 | 3);

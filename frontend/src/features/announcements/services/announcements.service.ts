@@ -22,11 +22,8 @@ export interface UpdateAnnouncementPayload {
   content?: string;
   is_pinned?: boolean;
 }
-type OwnerResidence = {
-  residence_id: string;
-};
 
-export const getOwnerResidence = async (ownerId: string):Promise<OwnerResidence> => {
+export const getOwnerResidence = async (ownerId: string):Promise<string> => {
   const response = await api.get(`/announcements/${ownerId}/residence`);
   return response.data.data;
    

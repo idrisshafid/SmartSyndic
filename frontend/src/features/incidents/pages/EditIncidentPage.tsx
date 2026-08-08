@@ -149,9 +149,14 @@ export default function EditIncidentPage() {
     try {
       await updateIncident.mutateAsync({ id: id!, data });
       setStep(4);
-    } catch (error) {
-      setSubmitError(error.message || "Erreur lors de la mise à jour de l'incident.");
-    }
+
+    }  catch (error) {
+       const message = error instanceof Error
+      ? error.message
+      : "Erreur lors de la mise à jour de l'incident.";
+
+      setSubmitError(message);
+         }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +169,11 @@ export default function EditIncidentPage() {
       }
       await refetchPhotos();
     } catch (error) {
-      alert(`Erreur lors de l'upload : ${error.message}`);
+      const message =  error instanceof Error
+      ? error.message
+      : "Erreur inconnue lors de l'upload.";
+      alert(`Erreur lors de l'upload : ${message}`);
+
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -178,7 +187,12 @@ export default function EditIncidentPage() {
       await deletePhoto.mutateAsync(photoId);
       await refetchPhotos();
     } catch (error) {
-      alert(`Erreur lors de la suppression : ${error.message}`);
+       const message =   error instanceof Error
+      ? error.message
+      : "Erreur inconnue lors de la suppression.";
+
+     alert(`Erreur lors de la suppression : ${message}`);
+
     } finally {
       setDeletingPhotoId(null);
     }

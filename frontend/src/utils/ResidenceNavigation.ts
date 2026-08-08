@@ -1,5 +1,5 @@
 export function getResidenceDetailPath(
-  role: string | undefined,
+  role: string | undefined ,
   residenceId: string
 ) {
   switch (role) {
