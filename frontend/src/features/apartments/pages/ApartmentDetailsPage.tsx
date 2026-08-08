@@ -306,77 +306,104 @@ export default function ApartmentDetailsPage() {
         </motion.div>
 
         {/* Hero gallery */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.05 }}
-          className="relative mb-12 overflow-hidden rounded-[24px]"
+       {/* Hero gallery */}
+<motion.div
+  initial={{ opacity: 0, y: 16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.45, delay: 0.05 }}
+  className="relative mb-12 overflow-hidden rounded-[24px]"
+>
+  {primaryPhoto ? (
+    <div
+      className={`
+        grid gap-1.5
+        ${
+          secondaryPhotos.length === 0
+            ? "h-[360px] md:h-[460px] grid-cols-1"
+            : secondaryPhotos.length === 1
+            ? "h-[280px] md:h-[460px] grid-cols-1 md:grid-cols-2"
+            : secondaryPhotos.length === 2
+            ? "h-[280px] md:h-[460px] grid-cols-1 md:grid-cols-2 md:grid-rows-2"
+            : secondaryPhotos.length === 3
+            ? "h-[280px] md:h-[460px] grid-cols-1 md:grid-cols-2 md:grid-rows-2"
+            : "h-[280px] md:h-[460px] grid-cols-1 md:grid-cols-4 md:grid-rows-2"
+        }
+      `}
+    >
+      {/* Primary / main image */}
+      <div
+        className={`
+          relative cursor-pointer overflow-hidden
+          ${
+            secondaryPhotos.length === 0
+              ? "h-full"
+              : secondaryPhotos.length === 1
+              ? "h-full"
+              : secondaryPhotos.length === 2
+              ? "h-[280px] md:row-span-2 md:h-full"
+              : secondaryPhotos.length === 3
+              ? "h-[280px] md:h-full"
+              : "h-[280px] md:col-span-2 md:row-span-2 md:h-full"
+          }
+        `}
+        onClick={() => {
+          setLightboxIndex(0);
+          setLightboxOpen(true);
+        }}
+      >
+        <img
+          src={primaryPhoto.photo_url}
+          alt={apartment.apartment_number}
+          className="h-full w-full object-cover transition duration-700 hover:scale-[1.03]"
+        />
+      </div>
+
+      {/* Secondary images */}
+      {secondaryPhotos.map((photo, i) => (
+        <div
+          key={photo.id}
+          className="relative hidden cursor-pointer overflow-hidden md:block"
+          onClick={() => {
+            const originalIndex = photos.findIndex((p) => p.id === photo.id);
+            setLightboxIndex(originalIndex !== -1 ? originalIndex : i + 1);
+            setLightboxOpen(true);
+          }}
         >
-          {primaryPhoto ? (
-            <div className="grid grid-cols-1 gap-1.5 md:h-[460px] md:grid-cols-4 md:grid-rows-2">
-              <div
-                className={`relative cursor-pointer overflow-hidden ${
-                  secondaryPhotos.length > 0
-                    ? "h-[280px] md:col-span-2 md:row-span-2 md:h-full"
-                    : "h-[360px] md:col-span-4 md:row-span-2 md:h-full"
-                }`}
-                onClick={() => {
-                  setLightboxIndex(0);
-                  setLightboxOpen(true);
-                }}
-              >
-                <img
-                  src={primaryPhoto.photo_url}
-                  alt={apartment.apartment_number}
-                  className="h-full w-full object-cover transition duration-700 hover:scale-[1.03]"
-                />
-              </div>
-
-              {secondaryPhotos.map((photo, i) => (
-                <div
-                  key={photo.id}
-                  className="relative hidden cursor-pointer overflow-hidden md:block"
-                  onClick={() => {
-                    const originalIndex = photos.findIndex((p) => p.id === photo.id);
-                    setLightboxIndex(originalIndex !== -1 ? originalIndex : i + 1);
-                    setLightboxOpen(true);
-                  }}
-                >
-                  <img
-                    src={photo.photo_url}
-                    alt=""
-                    className="h-full w-full object-cover transition duration-700 hover:scale-105"
-                  />
-                  {i === secondaryPhotos.length - 1 && photos.length > 5 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-900/45">
-                      <span className="text-sm font-semibold text-white">
-                        +{photos.length - 5} photos
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-72 w-full flex-col items-center justify-center gap-3 rounded-[24px]">
-              <Camera size={40} />
-              <span className="text-sm font-medium">No photos available</span>
+          <img
+            src={photo.photo_url}
+            alt=""
+            className="h-full w-full object-cover transition duration-700 hover:scale-105"
+          />
+          {i === secondaryPhotos.length - 1 && photos.length > 5 && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-900/45">
+              <span className="text-sm font-semibold text-white">
+                +{photos.length - 5} photos
+              </span>
             </div>
           )}
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="flex h-72 w-full flex-col items-center justify-center gap-3 rounded-[24px]">
+      <Camera size={40} />
+      <span className="text-sm font-medium">No photos available</span>
+    </div>
+  )}
 
-          {photos.length > 0 && (
-            <button
-              onClick={() => {
-                setLightboxIndex(0);
-                setLightboxOpen(true);
-              }}
-              className="absolute bottom-4 right-4 flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold shadow-lg backdrop-blur-sm transition hover:bg-white active:scale-[0.98]"
-            >
-              <Camera size={16} className="text-orange-500" />
-              Show all photos
-            </button>
-          )}
-        </motion.div>
+  {photos.length > 0 && (
+    <button
+      onClick={() => {
+        setLightboxIndex(0);
+        setLightboxOpen(true);
+      }}
+      className="absolute bottom-4 right-4 flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold shadow-lg backdrop-blur-sm transition hover:bg-white active:scale-[0.98]"
+    >
+      <Camera size={16} className="text-orange-500" />
+      Show all photos
+    </button>
+  )}
+</motion.div>
 
         {/* Content + booking card */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
