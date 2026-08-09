@@ -132,7 +132,7 @@ export default function RegisterPage() {
 
           {/* ── BACKEND ERROR ── */}
           {registerMutation.isError && axios.isAxiosError(registerMutation.error) && (
-            <div className="mt-4 rounded-xl border p-3">
+            <div className="mt-4 rounded-xl border border-red-300 bg-red-50 p-3 text-red-700">
               <p className="text-sm">
                 {registerMutation.error.response?.data?.message}
               </p>
