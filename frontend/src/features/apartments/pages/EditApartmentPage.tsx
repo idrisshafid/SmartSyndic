@@ -22,7 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ImageOff,
-  PartyPopper,
+ 
   type LucideIcon,
 } from "lucide-react";
 
@@ -814,10 +814,8 @@ export default function EditApartmentWizardPage() {
 
           {/* STEP 5 SUCCESS */}
           {step === 5 && (
-            <div className="py-6 text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border">
-                <PartyPopper size={28} />
-              </div>
+            <div className="py-6 text-center ">
+             <h1 className="text-6xl">🎉</h1>
               <h2 className="mt-5 text-2xl font-bold">Apartment updated!</h2>
               <p className="mt-2">Apartment {values.apartment_number} has been updated.</p>
 
