@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   BotIcon,
   X,
@@ -66,11 +67,16 @@ export default function ChatbotFloating() {
         };
         setMessages((prev) => [...prev, assistantMessage]);
       },
+     
       onError: (err) => {
-        const errorMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: `❌ Erreur : ${err.message || "Impossible de traiter votre demande."}`,
+const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: axios.isAxiosError(err)
+            ? err.response?.data?.message ||
+              err.message ||
+              "Impossible de traiter votre demande."
+            : "Impossible de traiter votre demande.",
         };
         setMessages((prev) => [...prev, errorMessage]);
       },

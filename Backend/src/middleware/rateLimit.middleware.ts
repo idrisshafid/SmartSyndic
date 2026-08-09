@@ -35,12 +35,16 @@ export const authLimiter = rateLimit({
 // 20 requests / hour
 // ======================================
 export const chatbotLimiter = rateLimit({
-  windowMs: 5 * 60 * 60 * 1000, // 1 hour
-  max: 2,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Chatbot rate limit exceeded. Please try again later."
-  }
+    windowMs: 5 * 60 * 60 * 1000, // 5 hours
+    max: 3,
+
+    standardHeaders: true,
+    legacyHeaders: false,
+
+    handler: (req, res) => {
+        return res.status(429).json({
+            success: false,
+            message: "Chatbot rate limit exceeded. Please try again in 5 hours."
+        });
+    }
 });

@@ -36,7 +36,9 @@ Create 4 search strategies.
 
 The first one must be exact.
 
-The others must relax conditions.
+The others must relax conditions but please if user specify city not give json format  with other city
+And if user send message like hi or question not for appartment search please not send this format send queries with
+and do in city: zzzzzzz for be not found
 
 Format:
 
