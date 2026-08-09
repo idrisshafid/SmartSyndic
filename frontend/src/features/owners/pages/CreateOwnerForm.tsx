@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import {
   ArrowLeft,
   ArrowRight,
@@ -25,7 +25,8 @@ import {
   useAssignApartment,
   useUnassignApartment,
 } from "../hooks/owner.hooks";
-import { getAllApartment } from "@/features/apartments/services/apartments.service";
+import { useResidences } from "@/features/residences/hooks/residence.hook";
+import { getApartmentsByResidence } from "@/features/apartments/services/apartments.service";
 
 const WIZARD_STEPS = [
   { number: 1, label: "Owner Info" },
@@ -97,23 +98,41 @@ export default function CreateOwnerWizardPage() {
     },
   });
 
-  const { data: allApartmentsData, isLoading: apartmentsLoading } = useQuery({
-    queryKey: ["apartments", "all"],
-    queryFn: getAllApartment,
+  // ─── 1. Récupérer les résidences du syndic ─────────────────────────────
+  const { data: residencesData, isLoading: residencesLoading } =
+    useResidences();
+
+  const residences = residencesData?.data?.residences ?? [];
+
+  // ─── 2. Récupérer les appartements de chaque résidence via le service ──
+  const apartmentQueries = useQueries({
+    queries: residences.map((res) => ({
+      queryKey: ["apartments", "by-residence", res.id],
+      queryFn: () => getApartmentsByResidence(res.id), // ✅ appel direct du service
+      enabled: !!res.id,
+      staleTime: 60 * 1000,
+    })),
   });
 
+  const isLoadingApartments =
+    residencesLoading || apartmentQueries.some((q) => q.isLoading);
+
+  // ─── 3. Fusionner tous les appartements ──────────────────────────────
+  const allApartments = apartmentQueries.flatMap(
+    (q) => q.data?.data ?? []
+  );
+
+  // ─── 4. Appartements déjà assignés au propriétaire ────────────────────
   const { data: ownerApartmentsData, isLoading: ownerApartmentsLoading } =
     useOwnerApartments(ownerId ?? "");
-  const assignMutation = useAssignApartment();
-  const unassignMutation = useUnassignApartment();
 
-  const allApartments = Array.isArray(allApartmentsData?.data)
-    ? allApartmentsData.data
-    : [];
   const assignedApartments = Array.isArray(ownerApartmentsData?.data)
     ? ownerApartmentsData.data
     : [];
   const assignedIds = new Set(assignedApartments.map((a) => a.id));
+
+  const assignMutation = useAssignApartment();
+  const unassignMutation = useUnassignApartment();
 
   const visibleApartments = allApartments.filter((apt) =>
     apt.apartment_number
@@ -291,34 +310,30 @@ export default function CreateOwnerWizardPage() {
                 />
               </div>
 
-              {(apartmentsLoading || ownerApartmentsLoading) && (
+              {isLoadingApartments || ownerApartmentsLoading ? (
                 <div className="space-y-3">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="h-16 animate-pulse rounded-2xl" />
                   ))}
                 </div>
-              )}
-
-              {!apartmentsLoading &&
-                !ownerApartmentsLoading &&
-                visibleApartments.length === 0 && (
-                  <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed py-10 text-center">
-                    <Building2 size={24} />
-                    <p className="mt-2 text-sm">
-                      {apartmentSearch
-                        ? "No apartments match that search."
-                        : "No apartments available to assign. Create an apartment first."}
-                    </p>
-                    <Link
-                      to={`/residences/your-residence-id/apartments/new`}
-                      className="mt-3 text-sm font-medium text-orange-500 hover:underline"
-                    >
-                      + Add Apartment
-                    </Link>
-                  </div>
-                )}
-
-              {!apartmentsLoading && !ownerApartmentsLoading && (
+              ) : allApartments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed py-10 text-center">
+                  <Building2 size={24} />
+                  <p className="mt-2 text-sm">
+                    Vous ne gérez aucune résidence ou aucun appartement.
+                    Veuillez d’abord créer un appartement.
+                  </p>
+                </div>
+              ) : visibleApartments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed py-10 text-center">
+                  <Building2 size={24} />
+                  <p className="mt-2 text-sm">
+                    {apartmentSearch
+                      ? "Aucun appartement ne correspond à cette recherche."
+                      : "Aucun appartement disponible à assigner."}
+                  </p>
+                </div>
+              ) : (
                 <div className="max-h-96 space-y-2 overflow-y-auto pr-1">
                   {visibleApartments.map((apartment) => {
                     const isAssigned = assignedIds.has(apartment.id);
@@ -335,7 +350,7 @@ export default function CreateOwnerWizardPage() {
                       >
                         <div>
                           <p className="font-medium">
-                            Apartment {apartment.apartment_number}
+                            Appartement {apartment.apartment_number}
                           </p>
                           <div className="mt-1 flex items-center gap-3 text-xs">
                             <span className="flex items-center gap-1">
@@ -369,15 +384,16 @@ export default function CreateOwnerWizardPage() {
 
               <div className="mt-8 flex items-center justify-between border-t pt-6">
                 <span className="text-sm">
-                  {assignedApartments.length} apartment
-                  {assignedApartments.length === 1 ? "" : "s"} assigned
+                  {assignedApartments.length} appartement
+                  {assignedApartments.length === 1 ? "" : "s"} assigné
+                  {assignedApartments.length === 1 ? "" : "s"}
                 </span>
                 <button
                   type="button"
                   onClick={() => setStep(3)}
                   className="flex items-center gap-2 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
                 >
-                  Finish
+                  Terminer
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -399,24 +415,24 @@ export default function CreateOwnerWizardPage() {
                   <PartyPopper size={28} className="text-orange-600" />
                 )}
               </div>
-              <h2 className="mt-5 text-2xl font-bold">Owner added!</h2>
+              <h2 className="mt-5 text-2xl font-bold">Propriétaire ajouté !</h2>
               <p className="mt-2">
-                {ownerName} is now linked to {assignedApartments.length}{" "}
-                apartment{assignedApartments.length === 1 ? "" : "s"}.
+                {ownerName} est maintenant lié à {assignedApartments.length}{" "}
+                appartement{assignedApartments.length === 1 ? "" : "s"}.
               </p>
 
               <div className="mt-8 space-y-2">
                 <Link
-                  to={`/owners/${ownerId}`}
+                  to={`/syndic/owners/${ownerId}`}
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 py-3 font-semibold text-white transition hover:bg-orange-600"
                 >
-                  View Owner
+                  Voir le propriétaire
                 </Link>
                 <Link
-                  to="/owners"
+                  to="/syndic/owners"
                   className="flex w-full items-center justify-center gap-2 rounded-xl border py-3 font-semibold transition hover:bg-slate-50"
                 >
-                  Back to Owners
+                  Retour aux propriétaires
                 </Link>
               </div>
             </div>
