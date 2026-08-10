@@ -16,7 +16,7 @@ export const sendResetEmail = async (
   to: string,
   token: string
 ) => {
-  const resetLink = `http://localhost:5173/reset-password/${token}`;
+  const resetLink = `https://smart-syndic-h46p.vercel.app/reset-password/${token}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
