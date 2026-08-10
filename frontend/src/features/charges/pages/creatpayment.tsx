@@ -114,8 +114,7 @@ export default function CreatePaymentPage() {
         notes: data.notes || undefined,
       });
       navigate(-1);
-    }
-     catch (err) {
+    } catch (err) {
       setError(
       err instanceof Error
       ? err.message

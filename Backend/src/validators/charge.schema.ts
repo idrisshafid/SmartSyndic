@@ -50,31 +50,11 @@ export type CreateChargeInput = z.infer<typeof createChargeSchema>;
 // ===============================
 
 export const paymentSchema = z.object({
-
-  charge_id: z
-    .string()
-    .uuid("Invalid charge id"),
-
-  amount: z
-    .number({
-      message: "Amount must be a number",
-    })
-    .positive("Payment amount must be greater than 0"),
-
-  payment_method: z
-    .string()
-    .min(2, "Payment method is required")
-    .max(50).optional,
-
-  reference: z
-    .string()
-    .max(255)
-    .optional(),
-
-  notes: z
-    .string()
-    .max(1000)
-    .optional(),
+  charge_id: z.string().min(3, "Veuillez sélectionner une charge"),
+  payment_date: z.string().min(1, "Date de paiement requise"),
+  payment_method: z.string().min(1, "Méthode de paiement requise"),
+  reference: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 

@@ -6,16 +6,23 @@ import * as chargeService from "../services/charge.services"
 // Validate Payment
 // ======================================
 export const validatePayment = async (
-  req: Request, res: Response) => {
+  req: Request,
+  res: Response
+) => {
   try {
-    const payment = await paymentService.validatePayment(req.body);
+    const payment = await paymentService.validatePayment({
+      ...req.body,
+      validated_by: req.user!.id,
+    });
 
     return res.status(201).json({
       success: true,
       message: "Payment validated successfully",
       data: payment,
-    });   } 
-    catch (error: any) {
+    });
+  } catch (error: any) {
+    console.error("VALIDATE PAYMENT ERROR:", error);
+
     return res.status(400).json({
       success: false,
       message: error.message,
