@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit";
 // ======================================
 export const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
-  max: 60,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   
@@ -22,7 +22,7 @@ export const generalLimiter = rateLimit({
 // ======================================
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -36,7 +36,7 @@ export const authLimiter = rateLimit({
 // ======================================
 export const chatbotLimiter = rateLimit({
     windowMs: 5 * 60 * 60 * 1000, // 5 hours
-    max: 3,
+    max: 5,
 
     standardHeaders: true,
     legacyHeaders: false,
