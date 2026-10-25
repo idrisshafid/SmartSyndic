@@ -35,7 +35,6 @@ api.interceptors.request.use(
         } catch  { /* ignore */ }
       }
     }
-    console.log("🔑 Token attached:", config.headers.Authorization ? "✅ Yes" : "❌ No");
     return config;
   },
   (error) => Promise.reject(error)
@@ -48,7 +47,16 @@ api.interceptors.request.use(
 // =====================================
 
 api.interceptors.response.use(
+  (response) => response,
 
-  (response) => response) ;
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token absent, invalide ou expiré
+      useAuthStore.getState().logout();
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 export default api;
